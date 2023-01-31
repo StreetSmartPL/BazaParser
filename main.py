@@ -124,6 +124,16 @@ def main():
 
   with open('data.json', 'w') as outfile:
     json.dump(questions, outfile, default=lambda o: o.__dict__, ensure_ascii=False)
+  with open('kategorie.json','w') as outfile:
+    kategorie = {}
+    for key, value in questions.items():
+      for k, v in value.Kategorie.__dict__.items():
+        if v:
+          if k not in kategorie:
+            kategorie[k] = []
+          kategorie[k].append(key)
+    json.dump(kategorie, outfile, default=lambda o: o.__dict__, ensure_ascii=False)
+
   print("Done")
 
 
