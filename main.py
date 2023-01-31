@@ -12,6 +12,21 @@ class LangPyt:
   OdpowiedzA: str # Odpowiedź A
   OdpowiedzB: str # Odpowiedź B
   OdpowiedzC: str # Odpowiedź C
+  
+@dataclass_json
+@dataclass
+class Kategorie:
+  Kat_A: bool
+  Kat_B: bool
+  Kat_C: bool
+  Kat_D: bool
+  Kat_T: bool
+  Kat_AM: bool
+  Kat_A1: bool
+  Kat_A2: bool
+  Kat_B1: bool
+  Kat_C1: bool
+  Kat_D1: bool
 
 @dataclass_json
 @dataclass
@@ -25,13 +40,14 @@ class Pytanie:
   Media: str # Media
   ZakresStruktury: str # Zakres struktury
   LiczbaPunktow: str # Liczba punktów
-  Kategorie: str # Kategorie
+  Kategorie: Kategorie # Kategorie
   NazwaBloku: str # Nazwa bloku
   ZrodloPytania: str # Źródło pytania
   OCoChcemyZapytac: str # O co chcemy zapytać
   JakiMaZwiazekZBezpieczenstwem: str # Jaki ma związek z bezpieczeństwem
   Status: str # Status
   Podmiot: str # Podmiot
+
 
 def removeNotFuckingImportantFiles(arrayofnames):
   for name in arrayofnames:
@@ -75,7 +91,19 @@ def read_excel():
       Media=row[15].value,
       ZakresStruktury=row[16].value,
       LiczbaPunktow=row[17].value,
-      Kategorie=row[18].value,
+      Kategorie=Kategorie(
+        Kat_A = row[18].value.__contains__("A"),
+        Kat_B = row[18].value.__contains__("B"),
+        Kat_C = row[18].value.__contains__("C"),
+        Kat_D = row[18].value.__contains__("D"),
+        Kat_T = row[18].value.__contains__("T"),
+        Kat_AM = row[18].value.__contains__("AM"),
+        Kat_A1 = row[18].value.__contains__("A1"),
+        Kat_A2 = row[18].value.__contains__("A2"),
+        Kat_B1 = row[18].value.__contains__("B1"),
+        Kat_C1 = row[18].value.__contains__("C1"),
+        Kat_D1 = row[18].value.__contains__("D1")
+      ),
       NazwaBloku=row[19].value,
       ZrodloPytania=row[20].value,
       OCoChcemyZapytac=row[21].value,
@@ -92,8 +120,10 @@ def read_excel():
 
 
 def main():
+  questions = read_excel()
+
   with open('data.json', 'w') as outfile:
-    json.dump(read_excel(), outfile, default=lambda o: o.__dict__, ensure_ascii=False)
+    json.dump(questions, outfile, default=lambda o: o.__dict__, ensure_ascii=False)
   print("Done")
 
 
